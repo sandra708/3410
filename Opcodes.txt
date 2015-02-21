@@ -1,0 +1,28 @@
+ADDIU - Op = 001001, rs[5], rt[5], I[16] (rt = rs + I) NO overflow trap
+ANDI - Op = 001100, rs[5], rt[5], I[16] (rt = rs AND I)
+ORI - Op = 001101, rs[5], rt[5], I[16] (rt = rs OR I)
+XORI - Op = 001110, rs[5], rt[5], I[16] (rt = rs XOR I)
+SLTI - Op = 001010, rs[5], rt[5], I[16] (rt = rs < I) as signed ints
+SLTIU - Op = 001011, rs[5], rt[5], I[16], (rt = rs < I) as unsigned ints (sign-extend I before comparison)
+
+ADDU - 0[6], rs[5], rt[5], rd[5], 0[5], 100001 (rd = rs + rt) NO overflow trap
+SUBU - 0[6], rs[5], rt[5], rd[5], 0[5], 100011 (rd = rs - rt) NO overflow trap
+AND - 0[6], rs[5], rt[5], rd[5], 0[5], 100100 (rd = rs AND rt)
+OR - 0[6], rs[5], rt[5], rd[5], 0[5], 100101 (rd = rs OR rt)
+XOR - 0[6], rs[5], rt[5], rd[5], 0[5], 100110 (rd = rs XOR rt)
+NOR - 0[6], rs[5], rt[5], rd[5], 0[5], 100111 (rd = rs NOR rt)
+SLT - 0[6], rs[5], rt[5], rd[5], 0[5], 101010 (rd = rs < rt) as signed ints
+SLTU - 0[6], rs[5], rt[5], rd[5], 0[5], 101011 (rd = rs < rt) as unsigned ints
+
+MOVN - 0[6], rs[5], rt[5], rd[5], 0[5], 001011 (if rt != 0 then rd = rs)
+MOVZ - 0[6], rs[5], rt[5], rd[5], 0[5], 001010 (if rt == 0 then rd = rs)
+
+SLL - 0[6], 0[5], rt[5], rd[5], sa[5], 000000 (rd = rt << sa) logical shift;
+SRL - 0[6], 0[5], rt[5], rd[5], sa[5], 000010 (rd = rt >> sa) logical shift;
+SRA - 0[6], 0[5], rt[5], rd[5], sa[5], 000011 (rd = rt >>> sa) arith shift;
+SLLV - 0[6], rs[5], rt[5], rd[5], 0[5], 000100 (rd = rt << rs) logical shift; use lowest 5 bits of rs
+SRLV - 0[6], rs[5], rt[5], rd[5], 0[5], 000110 (rd = rt >> rs) logical shift; use lowest 5 bits of rs
+SRAV - 0[6], rs[5], rt[5], rd[5], 0[5], 000111 (rd = rt >>> rs) arith shift; use lowest 5 bits of rs
+
+LUI - Op = 001111, 0[5], rt[5], I[16], load into the upper half of a register word, lower half 0
+
