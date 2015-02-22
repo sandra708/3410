@@ -26,3 +26,23 @@ SRAV - 0[6], rs[5], rt[5], rd[5], 0[5], 000111 (rd = rt >>> rs) arith shift; use
 
 LUI - Op = 001111, 0[5], rt[5], I[16], load into the upper half of a register word, lower half 0
 
+
+---PROJECT 2
+
+J, Op = 000010, index[26]
+JR, Op = 0[5], rs[5], 0[10], hint[5], 001000
+JAL, Op = 000011, index[26] 
+JALR Op = 0[6], rs[5], 0[5], rd[5], hint[5], 001001
+
+BEQ - Op = 000100, rs[5], rt[5], offset[16] (if rs == rt then branch)
+BNE - Op = 000101, rs[5], rt[5], offset[16] (if rs != rt then branch)
+BLEZ - Op = 000110, rs[5], 0[5], offset[16], (if rs <= 0 then branch)
+BGTZ - Op = 000111, rs[5], 0[5], offset[16] (if rs > 0 then branch)
+BLTZ - Op = 000001, rs[5], 0[5], offset[16] (if rs < 0 then branch)
+BGEZ - Op = 000001, rs[5], 00001, offset[16] (if rs >= 0 then branch)
+
+LW, Op = 100011, base[5], rt[5], offset[16]
+LB, Op = 100000, base[5], rt[5], offset[16] 
+LBU, Op = 100100, base[5], rt[5], offset[16]
+SW, Op = 101011, base[5], rt[5], offset[16]
+SB Op = 101000, base[5], rt[5], offset[16]
