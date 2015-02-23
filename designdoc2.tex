@@ -27,12 +27,14 @@ It determines a shift amount and op-code to send to the ALU.
 
 It also determines jump and branch amounts (though these values are not used).
 
-The registers at the end of this stage will store certain data for the next stage including the values of the read registers, PC$+4$, jump and branch targets, the immediate value, the shift amount, the op code, the write enable bit, and the register to write to.
+The registers at the end of this stage will store certain data for the next stage including the values of the read registers, PC$+4$, jump and branch targets, the immediate value, the shift amount, the op code, the write enable bit, and the register to write to. There are also two extra control bits indicating the presence of a set less than operation and whether it is signed or unsigned. 
 
 \section*{Execute}
 This section sign-extends the immediate value and selects whether to use register B or the immediate value in the operation.  Then, it performs the given ALU operation.
 
-This result is then combined with some additional logic (comparators in the case of slt for instance) and the result of the operation is outputted.
+This result is then combined with some additional logic (comparators in the case of SLT for instance) and the result of the operation is outputted.
+
+To implement the comparators SLTI and SLTIU, we can use the ALU subtraction operation. We separate out the MSB's of A and B, and compare them. If they are different, we have an immediate answer. If they are the same, we look to the output of the ALU. By replacing the sign bit with a 0, we preserve the ordering of the distinct sets $\{x \geq 0\}$ and $\{x < 0\}$. Then the result of the subtraction operation will have a sign bit of either 1 or 0. If the sign bit is 1, then we know $A < B$, and if the sign bit is 0, we know $A \geq B$, provided that the original MSB's of A and B, either signed or unsigned, were the same. 
 
 The registers at the end of this stage will store the result of the operation, PC$+4$, jump and branch targets, the result of the ALU operation, the write enable bit, and the register to write to.
 
