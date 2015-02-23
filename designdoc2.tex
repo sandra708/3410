@@ -14,7 +14,7 @@ Our MIPS processor will follow a five stage pipeline as discussed in class.  Eac
 \section*{Fetch}
 This stage Fetches the next instruction from the instruction memory and updates the program counter.  Both the instruction and PC$+4$ are passed into the register so that the next stage (Decode) has access to that information.  
 
-This stage also includes a multiplexer to select between PC$+4$ and jump/branch targets.  
+This stage also includes a multiplexer to select between PC$+4$ and jump/branch targets.
 
 \section*{Decode}
 This stage uses the bits in the instruction to determine several different values:
@@ -38,10 +38,10 @@ To implement the comparators SLTI and SLTIU, we can use the ALU subtraction oper
 
 Then the result of the subtraction operation will have a sign bit of either 1 or 0. If the sign bit is 1, then we know $A < B$, and if the sign bit is 0, we know $A \geq B$, provided that the original MSB's of A and B, either signed or unsigned, were the same. 
 
-The registers at the end of this stage will store the result of the operation, PC$+4$, jump and branch targets, the result of the ALU operation, the write enable bit, and the register to write to.
+The registers at the end of this stage will store PC$+4$, jump and branch targets, the result of the ALU operation, the write enable bit, and the register to write to.
 
 \section*{Memory}
-This section will be a pass-through stage. There will not be any logic here, though it will be blocked off by registers so all operations have to spend a cycle in this stage.
+This section will be a pass-through stage. There will not be any logic here, though it will be blocked off by registers so all operations have to spend a cycle in this stage. The registers at the end of this stage store the same values as the registers at it's beginning, for Project 1. 
 
 \section*{Writeback}
 This section will only write the results of the register and immediate operations that we have to implement.  It will not write the bits read from memory (as these operations will not be implemented).
