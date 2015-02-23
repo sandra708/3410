@@ -9,21 +9,29 @@
 \maketitle
 
 \section*{Introduction}
-
+Our MIPS processor will follow a five stage pipeline as discussed in class.  Each stage will be blocked off with registers storing necessary data.  Instructions will proceed through one stage of the pipeline per clock cycle.
 
 \section*{Fetch}
+This stage Fetches the next instruction from the instruction memory and updates the program counter.  Both the instruction and PC$+4$ are passed into the register so that the next stage (Decode) has access to that information.  
 
+This stage also includes a multiplexer to select between PC$+4$ and jump/branch targets.  
 
 \section*{Decode}
+This stage uses the bits in the instruction to determine several different values:
 
+It determines the immediate value for immediate operations (this value is computed regardless of whether or not the operation is an immediate operation - it is selected for using a multiplexer in the next stage).
+
+It determines which registers to read from (and reads those registers).
+
+It determines a shift amount and op-code to send to the ALU.  
 
 \section*{Execute}
 
 
 \section*{Memory}
-
+This section will be a pass-through stage. There will not be any logic here.
 
 \section*{Writeback}
-
+This section will only wright the results of the register and immediate operations that we have to implement.  It will not write the bits read from memory.
 
 \end{document}
