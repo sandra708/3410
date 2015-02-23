@@ -1,15 +1,24 @@
 \documentclass{article}
+
 \usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{graphicx}
+
 \title{CS3410 Project 1 Design Document}
 \date{February 25, 2015}
 \author{Alexandra Anderson, Joshua Hull}
+
 \begin{document}
 \maketitle
 
 \section*{Introduction}
-Our MIPS processor will follow a five stage pipeline as discussed in class.  Each stage will be blocked off with registers storing necessary data.  Instructions will proceed through one stage of the pipeline per clock cycle.
+Our MIPS processor will follow a five stage pipeline as discussed in class.  Each stage will be blocked off with registers storing necessary data.  Instructions will proceed through one stage of the pipeline per clock cycle. The overall diagram of how the stages are laid out is as follows:
+
+\begin{figure}[h]
+	\includegraphics[width = \textwidth]{layout}
+	\caption{The layout of the MIPS pipeline in five stages.}
+\end{figure}
 
 \section*{Fetch}
 This stage Fetches the next instruction from the instruction memory and updates the program counter.  Both the instruction and PC$+4$ are passed into the register so that the next stage (Decode) has access to that information.  
@@ -27,7 +36,7 @@ It determines a shift amount and op-code to send to the ALU.
 
 It also determines jump and branch amounts (though these values are not used).
 
-The registers at the end of this stage will store certain data for the next stage including the values of the read registers, PC$+4$, jump and branch targets, the immediate value, the shift amount, the op code, the write enable bit, and the register to write to. There are also two extra control bits indicating the presence of a set less than operation and whether it is signed or unsigned. 
+The registers at the end of this stage will store certain data for the next stage including the values of the read registers, PC$+4$, jump and branch targets, the immediate value, the shift amount, the op code, the write enable bit, and the register to write to. There are also two extra control bits indicating the presence of a set less than operation and whether it is signed or unsigned, and one more indicating whether this is an immediate or register operation. 
 
 \section*{Execute}
 This section sign-extends the immediate value and selects whether to use register B or the immediate value in the operation.  Then, it performs the given ALU operation.
