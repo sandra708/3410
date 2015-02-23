@@ -20,6 +20,8 @@ Our MIPS processor will follow a five stage pipeline as discussed in class.  Eac
 	\caption{The layout of the MIPS pipeline in five stages.}
 \end{figure}
 
+This is merely a design diagram. While we will implement the pipeline processor in the overall layout and sub circuits shown, very few wires are currently connected. The fetch, decode, and execute stages are not yet implemented, although space for them has been allocated. 
+
 \section*{Fetch}
 This stage Fetches the next instruction from the instruction memory and updates the program counter.  Both the instruction and PC$+4$ are passed into the register so that the next stage (Decode) has access to that information.  
 
