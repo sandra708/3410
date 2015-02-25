@@ -25,7 +25,9 @@ This is merely a design diagram. While we will implement the pipeline processor 
 \section*{Fetch}
 This stage Fetches the next instruction from the instruction memory and updates the program counter.  Both the instruction and PC$+4$ are passed into the register so that the next stage (Decode) has access to that information.  
 
-This stage also includes a multiplexer to select between PC$+4$ and jump/branch targets.
+To calculate PC$+4$, we split off the lower two digits of the PC, use the $+1$ incremented to increment the remaining 30 bits, and rejoin them into one 32 bit bus. 
+
+The Fetch stage will also include a multiplexer to select between PC$+4$ and jump/branch targets, for Project 2. 
 
 \section*{Decode}
 This stage uses the bits in the instruction to determine several different values:
@@ -39,6 +41,18 @@ It determines a shift amount and op-code to send to the ALU.
 It also determines jump and branch amounts (though these values are not used).
 
 The registers at the end of this stage will store certain data for the next stage including the values of the read registers, PC$+4$, jump and branch targets, the immediate value, the shift amount, the op code, the write enable bit, and the register to write to. There are also two extra control bits indicating the presence of a set less than operation and whether it is signed or unsigned, and one more indicating whether this is an immediate or register operation. 
+
+We include a simplified truth table to show how the decoding logic will work. Op[6] refers to the op-code, the first 6 bits of the operation. Func[6] refers to the final 6 bits of the operation. The ALU Op [4] is the 4-bit control signal passed directly into the ALU. 
+
+\begin{tabular}{c | c  c  c  c  c  c | c c c c c c | c c c c}
+\hline
+OPCODE & OP[6] &&&&&& FUNC[6] &&&&&& ALU OP[4] \\
+\hline
+ADDI	&0	&0	&1	&0	&0	&1	&x	&x	&x	&x	&x	&x	&0	&0	&1	&x \\ANDI	&0	&0	&1	&1	&0	&0	&x	&x	&x	&x	&x	&x	&1	&0	&0	&0 \\ORI		&0	&0	&1	&1	&0	&1	&x	&x	&x	&x	&x	&x	&1	&0	&1	&0 \\XORI	&0	&0	&1	&1	&1	&0	&x	&x	&x	&x	&x	&x	&1	&1	&0	&0 \\SLTI		&0	&0	&1	&0	&1	&0	&x	&x	&x	&x	&x	&x	&x	&x	&x	&x \\SLTIU	&0	&0	&1	&0	&1	&1	&x	&x	&x	&x	&x	&x	&x	&x	&x	&x\\
+\hlineADDU	&0	&0	&0	&0	&0	&0	&1	&0	&0	&0	&0	&1	&0	&0	&1	&x\\SUBU	&0	&0	&0	&0	&0	&0	&1	&0	&0	&0	&1	&1	&0	&1	&1	&x\\AND		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&0	&0	&1	&0	&0	&0\\OR		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&0	&1	&1	&0	&1	&0\\XOR		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&1	&0	&1	&1	&0	&0\\NOR		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&1	&1	&1	&1	&1	&0\\
+\hline
+\end{tabular}
+This represents a limited subset of the supported operations, and a limited subset of control bits. 
 
 \section*{Execute}
 This section sign-extends the immediate value and selects whether to use register B or the immediate value in the operation.  Then, it performs the given ALU operation.

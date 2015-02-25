@@ -1,0 +1,18 @@
+ALU Ops
+
+
+Op	name	C
+----  	----------------------  	--------------  
+000x	shift left	C = B << Sa;
+001x	add	C = A + B
+0100	shift right logical	C = B >>> Sa
+0101	shift right arithmetic	C = B >> Sa
+011x	subtract	C = A - B
+1000	and	C = A & B
+1010	or	C = A | B
+1100	xor	C = A ^ B
+1110	nor	C = ~(A | B)
+1001	eq	C = (A == B) ? 1 : 0
+1011	ne	C = (A != B) ? 1 : 0
+1101	gtz	C = (A > 0) ? 1 : 0
+1111	lez	C = (A ≤ 0) ? 1 : 0
