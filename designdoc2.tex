@@ -40,7 +40,7 @@ It determines a shift amount and op-code to send to the ALU.
 
 It also determines jump and branch amounts (though these values are not used).
 
-The registers at the end of this stage will store certain data for the next stage including the values of the read registers, PC$+4$, jump and branch targets, the immediate value, the shift amount, the op code, the write enable bit, and the register to write to. There are also two extra control bits indicating the presence of a set less than operation and whether it is signed or unsigned, and one more indicating whether this is an immediate or register operation. 
+The registers at the end of this stage will store certain data for the next stage including the values of the read registers, PC$+4$, jump and branch targets, the immediate value, the shift amount, the op code, the write enable bit, and the register to write to. There are also two extra control bits indicating the presence of a set less than operation and whether it is signed or unsigned, one more indicating whether this is an immediate or register operation, and two dealing with the three conditional move or load operations. 
 
 We include a simplified truth table to show how the decoding logic will work. Op[6] refers to the op-code, the first 6 bits of the operation. Func[6] refers to the final 6 bits of the operation. The ALU[4] is the 4-bit control signal passed directly into the ALU. 
 
@@ -48,8 +48,19 @@ We include a simplified truth table to show how the decoding logic will work. Op
 \hline
 OPCODE & OP[6] &&&&&& FUNC[6] &&&&&& ALU[4] &&&\\
 \hline
-ADDI	&0	&0	&1	&0	&0	&1	&x	&x	&x	&x	&x	&x	&0	&0	&1	&x \\ANDI	&0	&0	&1	&1	&0	&0	&x	&x	&x	&x	&x	&x	&1	&0	&0	&0 \\ORI		&0	&0	&1	&1	&0	&1	&x	&x	&x	&x	&x	&x	&1	&0	&1	&0 \\XORI	&0	&0	&1	&1	&1	&0	&x	&x	&x	&x	&x	&x	&1	&1	&0	&0 \\SLTI		&0	&0	&1	&0	&1	&0	&x	&x	&x	&x	&x	&x	&x	&x	&x	&x \\SLTIU	&0	&0	&1	&0	&1	&1	&x	&x	&x	&x	&x	&x	&x	&x	&x	&x\\
-\hlineADDU	&0	&0	&0	&0	&0	&0	&1	&0	&0	&0	&0	&1	&0	&0	&1	&x\\SUBU	&0	&0	&0	&0	&0	&0	&1	&0	&0	&0	&1	&1	&0	&1	&1	&x\\AND		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&0	&0	&1	&0	&0	&0\\OR		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&0	&1	&1	&0	&1	&0\\XOR		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&1	&0	&1	&1	&0	&0\\NOR		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&1	&1	&1	&1	&1	&0\\
+ADDI	&0	&0	&1	&0	&0	&1	&x	&x	&x	&x	&x	&x	&0	&0	&1	&x \\
+ANDI	&0	&0	&1	&1	&0	&0	&x	&x	&x	&x	&x	&x	&1	&0	&0	&0 \\
+ORI		&0	&0	&1	&1	&0	&1	&x	&x	&x	&x	&x	&x	&1	&0	&1	&0 \\
+XORI	&0	&0	&1	&1	&1	&0	&x	&x	&x	&x	&x	&x	&1	&1	&0	&0 \\
+SLTI		&0	&0	&1	&0	&1	&0	&x	&x	&x	&x	&x	&x	&x	&x	&x	&x \\
+SLTIU	&0	&0	&1	&0	&1	&1	&x	&x	&x	&x	&x	&x	&x	&x	&x	&x\\
+\hline
+ADDU	&0	&0	&0	&0	&0	&0	&1	&0	&0	&0	&0	&1	&0	&0	&1	&x\\
+SUBU	&0	&0	&0	&0	&0	&0	&1	&0	&0	&0	&1	&1	&0	&1	&1	&x\\
+AND		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&0	&0	&1	&0	&0	&0\\
+OR		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&0	&1	&1	&0	&1	&0\\
+XOR		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&1	&0	&1	&1	&0	&0\\
+NOR		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&1	&1	&1	&1	&1	&0\\
 \hline
 \end{tabular}
 
@@ -58,9 +69,18 @@ This represents a limited subset of the supported operations, and a limited subs
 \section*{Execute}
 This section sign-extends the immediate value and selects whether to use register B or the immediate value in the operation.  Then, it performs the given ALU operation.
 
-This result is then combined with some additional logic (comparators in the case of SLT for instance) and the result of the operation is outputted.
+This result is then combined with some additional logic (comparators in the case of SLT  or MOVZ for instance) and the result of the operation is outputted.
 
-The registers at the end of this stage will store PC$+4$, jump and branch targets, the result of the ALU operation, the write enable bit, and the register to write to.
+\begin{figure}[h]
+	\includegraphics[width = \textwidth]{execute}
+	\caption{The Execute pipeline stage}
+\end{figure}
+
+The execute circuit has hazard detection in the top left, arithmetic computation and control in the top right, and write enable and target register computations at the bottom. Moving is conditional, so we compute the conditions and the controls that say whether we're moving into the write enable. The destination register is stored in a different part of the original operation for immediate arithmetic. 
+
+We implement data hazard detection using forwarding, with a dedicated hazard detection sub circuit. There will be no control or memory hazards in Project 1, because we do not support branching, jumping, or memory operations. Therefore, the correct data will be stored in pipeline registers farther ahead, and we can easily use forwarding to resolve all hazards. 
+
+The registers at the end of this stage will store PC$+4$, the result of the ALU operation, the write enable bit, and the register to write to.
 
 \section*{Memory}
 This section will be a pass-through stage. There will not be any logic here, though it will be blocked off by registers so all operations have to spend a cycle in this stage. The registers at the end of this stage store the same values as the registers at it's beginning, for Project 1. 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  25 FEB 2015 13:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  1 MAR 2015 15:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -236,24 +236,29 @@ Overfull \hbox (81.50061pt too wide) in paragraph at lines 47--66
 [][] 
  []
 
-[2] [3] (./designdoc2.aux) ) 
+[2] <execute.png, id=14, 525.965pt x 602.25pt>
+File: execute.png Graphic file (type png)
+ <use execute.png>
+Package pdftex.def Info: execute.png used on input line 75.
+(pdftex.def)             Requested size: 345.0pt x 395.05098pt.
+ [3 <./execute.png>] [4] (./designdoc2.aux) ) 
 Here is how much of TeX's memory you used:
- 2449 strings out of 493117
- 32386 string characters out of 6135433
- 100881 words of memory out of 5000000
- 5881 multiletter control sequences out of 15000+600000
+ 2454 strings out of 493117
+ 32460 string characters out of 6135433
+ 101881 words of memory out of 5000000
+ 5885 multiletter control sequences out of 15000+600000
  10888 words of font info for 43 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,6n,26p,485b,226s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2014/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmr17.pfb>
-Output written on designdoc2.pdf (3 pages, 77698 bytes).
+ 37i,6n,26p,549b,226s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2014/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2014/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr17.pfb>
+Output written on designdoc2.pdf (4 pages, 94679 bytes).
 PDF statistics:
- 31 PDF objects out of 1000 (max. 8388607)
- 20 compressed objects within 1 object stream
+ 35 PDF objects out of 1000 (max. 8388607)
+ 22 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
