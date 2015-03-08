@@ -1,0 +1,28 @@
+ADDIU $1, $0, 0x0004 #Initial immediate addition test
+ADDU $2, $1, $1 #Forwarding from mem stage test
+ADDU $3, $1, $1 #Forwarding from wb stage test
+ADDU $4, $1, $1 #Clock Hack test
+
+ORI $5, $0, 0xFFFF #Basic or test
+LUI $6, 0x0001 #Basic LUI test - Does not work at the moment
+ADDU $7, $6, $5 #Another addition test
+ADDIU $7, $7, 0x0001 #Looking at overflow
+
+MOVN $10, $5, $0 #MOVN test when rt is 0 (register remains unchanged)
+MOVN $11, $5, $2 #MOVN test when rt is not 0 (register is set to the value of register 5)
+MOVZ $12, $5, $2 #MOVZ test when rt is not 0 (register remains unchanged
+MOVZ $13, $5, $0 #MOVZ test when rt is 0 (register is set to the value of register 5)
+
+ORI $20, $0, 0x1A90 #beginning of immediate arithmetic tests
+ORI $21, $0, 0x2C4F
+ANDI $22, $20, 0xAC22
+SLTI $23, $20, 0x2C3F #$23 should contain 1 after this operation
+SLTI $24, $21, 0x1A90 #$24 should contain 0 after this operation
+SLTI $25, $20, 0x8000 #$25 should contain 0 after this operation
+SLTI $26, $22, 0x2C4F #$26 should contain 1 after this operation
+SLTIU $27, $20, 0x2C4F #$27 should contain 1 after this operation
+SLTIU $28, $20, 0x8000 #$28 should contain 1 after this operation
+ADDIU $20, $20, 0x8000
+XORI $29, $20, 0x8000
+
+
