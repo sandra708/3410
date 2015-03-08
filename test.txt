@@ -3,17 +3,13 @@ ADDU $2, $1, $1 #Forwarding from mem stage test
 ADDU $3, $1, $1 #Forwarding from wb stage test
 ADDU $4, $1, $1 #Clock Hack test
 
-ORI $5, $0, 0xFFFF #Basic or test
-LUI $6, 0x0001 #Basic LUI test - Does not work at the moment
-ADDU $7, $6, $5 #Another addition test
-ADDIU $7, $7, 0x0001 #Looking at overflow
-
+ORI $5, $0, 0xFFFF #MOV tests
 MOVN $10, $5, $0 #MOVN test when rt is 0 (register remains unchanged)
 MOVN $11, $5, $2 #MOVN test when rt is not 0 (register is set to the value of register 5)
 MOVZ $12, $5, $2 #MOVZ test when rt is not 0 (register remains unchanged
 MOVZ $13, $5, $0 #MOVZ test when rt is 0 (register is set to the value of register 5)
 
-ORI $20, $0, 0x1A90 #beginning of immediate arithmetic tests
+ORI $20, $0, 0x1A90 #Set Less Than Immediate S/U Tests
 ORI $21, $0, 0x2C4F
 ANDI $22, $20, 0xAC22
 SLTI $23, $20, 0x2C3F #$23 should contain 1 after this operation
@@ -24,5 +20,155 @@ SLTIU $27, $20, 0x2C4F #$27 should contain 1 after this operation
 SLTIU $28, $20, 0x8000 #$28 should contain 1 after this operation
 ADDIU $20, $20, 0x8000
 XORI $29, $20, 0x8000
+
+LUI $11, 0xFFFF
+ADDIU $13, $0, 0x0001
+SLL $13, $13, 0x10
+ADDU $14, $11, $13 #should get 0
+OR $14, $14, $22
+LUI $15, 0xA1B2
+OR $16, $15, $14
+
+ADDIU $0, $21, 0xFFFF #Trying to write to 0
+LUI $0, 0xABCD
+
+AND $1, $1, $0 #Prepping registers for register arithmetic tests
+AND $2, $2, $0
+AND $3, $3, $0
+AND $4, $4, $0
+AND $5, $5, $0
+
+LUI $1, 0xFACE #Setting lowest 16 bits, testing LUI
+LUI $2, 0x1ABC
+LUI $3, 0xBEEF
+LUI $4, 0x6282
+LUI $5, 0x3CA9
+SRL $1, $1, 0x10 #Also testing SRL
+SRL $2, $2, 0x10
+SRL $3, $3, 0x10
+SRL $4, $4, 0x10
+SRL $5, $5, 0x10
+
+LUI $6, 0xECAF #Setting highest 16 bits
+LUI $7, 0x23AB
+LUI $8, 0x6FEA
+LUI $9, 0x9873
+LUI $10, 0xAAB1
+OR $1, $6, $1
+OR $2, $7, $2
+OR $3, $8, $3
+OR $4, $9, $4
+OR $5, $10, $5
+
+ADDU $6, $1, $2 #Addition Tests
+ADDU $7, $1, $3
+ADDU $8, $3, $5
+ADDU $9, $4, $5
+ADDU $10, $2, $2
+
+SUBU $11, $1, $2 #Subtraction Tests
+SUBU $12, $2, $1
+SUBU $13, $4, $5
+SUBU $14, $4, $3
+SUBU $15, $2, $2
+
+AND $16, $1, $1 #And Tests
+AND $17, $1, $5
+AND $18, $2, $3
+AND $19, $4, $3
+AND $20, $5, $4
+
+OR $21, $1, $2 #OR Tests
+OR $22, $3, $3
+OR $23, $4, $3
+OR $24, $5, $4
+OR $25, $5, $1
+
+XOR $26, $2, $5 #XOR Tests
+XOR $27, $3, $3
+XOR $28, $4, $1
+XOR $29, $1, $2
+XOR $30, $2, $4
+
+NOR $6, $2, $3 #NOR Tests
+NOR $7, $1, $1
+NOR $8, $5, $1
+NOR $9, $3, $3
+NOR $10, $4, $2
+
+SLT $11, $1, $4 #SLT Tests - $11 should be 0x0
+SLT $12, $2, $3 #$12 should be 0x1
+SLT $13, $4, $3 #$13 should be 0x1
+SLT $14, $5, $1 #$14 should be 0x1
+SLT $15, $4, $5 #$15 should be 0x1
+
+SLTU $16, $1, $4 #SLTU Tests - $16 should be 0x0
+SLTU $17, $2, $3 #$17 should be 0x1
+SLTU $18, $4, $3 #$18 should be 0x0
+SLTU $19, $5, $1 #$19 should be 0x1
+SLTU $20, $2, $4 #$20 should be 0x1
+
+SLL $21, $1, 0x11 #SLL Tests
+SLL $22, $2, 0x1F
+SLL $23, $3, 0x05
+SLL $24, $4, 0x01
+SLL $25, $5, 0x12
+
+SRL $26, $1, 0x11 #SRL Tests
+SRL $27, $2, 0x1F
+SRL $28, $3, 0x05
+SRL $29, $4, 0x01
+SRL $30, $5, 0x12
+
+SRA $6, $1, 0x11 #SRA Tests
+SRA $7, $2, 0x1F
+SRA $8, $3, 0x05
+SRA $9, $4, 0x01
+SRA $10, $5, 0x12
+
+SLLV $11, $1, $2 #SLLV Tests
+SLLV $12, $2, $3
+SLLV $13, $3, $4
+SLLV $14, $4, $5
+SLLV $15, $5, $1
+
+SRLV $16, $1, $2 #SRLV Tests
+SRLV $17, $2, $3
+SRLV $18, $3, $4
+SRLV $19, $4, $5
+SRLV $20, $5, $1
+
+SRAV $21, $1, $2 #SRLV Tests
+SRAV $22, $2, $3
+SRAV $23, $3, $4
+SRAV $24, $4, $5
+SRAV $25, $5, $1
+
+ADDIU $26, $1, 0xABCD #ADDIU Tests
+ADDIU $27, $2, 0x023F
+ADDIU $28, $3, 0x7777
+ADDIU $29, $4, 0xF1AA
+ADDIU $30, $5, 0x1234
+
+ANDI $6, $1, 0xABCD #ANDI Tests
+ANDI $7, $2, 0x023F
+ANDI $8, $3, 0x7777
+ANDI $9, $4, 0xF1AA
+ANDI $10, $5, 0x1234
+
+ORI $11, $1, 0xABCD #ORI Tests
+ORI $12, $2, 0x023F
+ORI $13, $3, 0x7777
+ORI $14, $4, 0xF1AA
+ORI $15, $5, 0x1234
+
+XORI $11, $1, 0xABCD #XORI Tests
+XORI $12, $2, 0x023F
+XORI $13, $3, 0x7777
+XORI $14, $4, 0xF1AA
+XORI $15, $5, 0x1234
+
+
+
 
 
