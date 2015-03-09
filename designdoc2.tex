@@ -64,7 +64,22 @@ NOR		&0	&0	&0	&0	&0	&0	&1	&0	&0	&1	&1	&1	&1	&1	&1	&0\\
 \hline
 \end{tabular}
 
-This represents a limited subset of the supported operations, and a limited subset of control bits. 
+This represents a limited subset of the supported operations, and a limited subset of control bits.  The decode logic takes in the 12 bits described above outputs 7 bits of control logic used in the execute stage as well as a 4 bit opcode.  The logic functions and the meaning of these bits are as follows:
+
+WE is a bit that is set if the given operation may write to a register.  Note that this bit is set regardless of whether or not the operation actually does write to a register (consider the operation MOVN) - that is computed in the execute stage.  The logic for WE is $(\sim op5) (\sim op4) op3 + \sim(op0 op1 op2 op3 op4 op5) \sim((\sim f5) (\sim f4) f3 (\sim f2) (\sim f1))$
+
+LUI is a bit which determines if the operation is an LUI operation.  It is used to select the proper immediate value.  The logic for LUI is $op2 op1 op0$.
+
+The control logic bits $C0-C4$ determined several different pieces of information.  First, if the operation was either a MOVN or a LUI op, if it was one of the $2$, $C0$ was $1$, otherwise it was $0$.  Second, $C1$ held $1$ if the op was a move op, $0$ otherwise.  $C2$ determined the sign of an SLT/SLTI op ($0$ for unsigned, $1$ for signed).  $C2$ was also $1$ if the operation was a variable shift.  $C3$ was $1$ if the operation was a SLT/SLTI op, otherwise it was $0$.  Finally, $C4$ determined whether the operation was an immediate or a register operation.  Note I do not include the logic here as it is rather complex.  To see the logic, analyze the Decode circuit.
+
+All of these bits were used in the execute stage to select for the correct operation/inputs through multiplexers.  The $4-$bit opcode was passed into the ALU as it determined which ALU operation was to be computed.
+
+\begin{figure}[h]
+	\includegraphics[width = \textwidth]{decode}
+	\caption{The Decode pipeline stage}
+\end{figure}
+
+Note that on page $5$ of this design doc you can view the Decode stage of the pipeline.
 
 \section*{Execute}
 This section sign-extends the immediate value and selects whether to use register B or the immediate value in the operation.  Then, it performs the given ALU operation.
@@ -72,9 +87,11 @@ This section sign-extends the immediate value and selects whether to use registe
 This result is then combined with some additional logic (comparators in the case of SLT  or MOVZ for instance) and the result of the operation is outputted.
 
 \begin{figure}[h]
-	\includegraphics[width = \textwidth]{execute}
+	\includegraphics[width = \textwidth]{execute2}
 	\caption{The Execute pipeline stage}
 \end{figure}
+
+Scroll down to page $6$ to view the execute stage.
 
 The execute circuit has hazard detection in the top left, arithmetic computation and control in the top right, and write enable and target register computations at the bottom. Moving is conditional, so we compute the conditions and the controls that say whether we're moving into the write enable. The destination register is stored in a different part of the original operation for immediate arithmetic. 
 
