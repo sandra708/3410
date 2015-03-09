@@ -5,6 +5,7 @@ ADDU $4, $1, $1 #Clock Hack test
 
 ORI $5, $0, 0xFFFF #MOV tests
 MOVN $10, $5, $0 #MOVN test when rt is 0 (register remains unchanged)
+ADDU $14, $2, $10 #Hazard test - check that forwarding does not occur when WE is 0
 MOVN $11, $5, $2 #MOVN test when rt is not 0 (register is set to the value of register 5)
 MOVZ $12, $5, $2 #MOVZ test when rt is not 0 (register remains unchanged
 MOVZ $13, $5, $0 #MOVZ test when rt is 0 (register is set to the value of register 5)
@@ -30,6 +31,7 @@ LUI $15, 0xA1B2
 OR $16, $15, $14
 
 ADDIU $0, $21, 0xFFFF #Trying to write to 0
+ADDU $1, $0, $1 #Hazard Checking - check that forwarding does not occur when writing to $0
 LUI $0, 0xABCD
 
 AND $1, $1, $0 #Prepping registers for register arithmetic tests
@@ -168,7 +170,25 @@ XORI $18, $3, 0x7777 #$18 should have value 0x6FEAC998
 XORI $19, $4, 0xF1AA #$19 should have value 0x678C9328
 XORI $20, $5, 0x1234 #$20 should have value 0xAAB12E9D
 
-
+AND $1, $1, $0
+J 0x0 #Tests for unimplemented instructions - should run as no-ops
+JR $1
+JAL 8
+ADDU $31, $31, $0 #Check that forwarding does not occur with unimplemented operations
+JALR $1
+BEQ $1, $1, 8
+BNE $1, $2, 8
+BLEZ $1, 8
+BGTZ $2, 8
+BLTZ $1, 8
+BGEZ $2, 8
+LW $1, 8($2)
+ADDU $31, $1, $0 #Check that forwarding does not occur with unimplemented operations
+ADDU $31, $1, $0 #Check that forwarding does not occur with unimplemented operations
+LB $1, 8($2)
+LBU $1, 8($2)
+SW $1, 8($2)
+SB $1, 8($2)
 
 
 
