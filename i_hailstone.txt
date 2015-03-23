@@ -1,0 +1,27 @@
+return $2, $3
+callee save: $16 - $23
+caller save: $8 - $15, $24, $25
+args: $4 - $7
+
+ADDU $8, $0, $0
+ADDIU $12, $0, 0x1
+
+LOOP
+ADDU $11, $4, $12
+BEQ $11, $12, EXIT
+
+ADDU $8, $8, $12
+SLL $9, $4, 31
+BLTZ $9, ODD
+
+SRL $4, $4, 1
+J LOOP
+
+ODD
+ADDU $10, $4, $4
+ADDU $10, $10, $4
+ADDU $4, $10, $12
+J LOOP
+
+EXIT
+ADDU $2, $8, $0

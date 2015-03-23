@@ -1,0 +1,21 @@
+ifLink - true for JAL, JALR, false if a different branch/jump, otherwise don't care
+ifBranch - true for all branch/jump ops, false otherwise
+ifReg - false for J, JAL, true if a different branch/jump, otherwise don't care
+branch-control
+	000 - BLZ
+	001 - BGE
+	010 - BGZ
+	011 - BLE
+	100 - BNE
+	101 - BEQ
+	11x - unconditional branch
+
+branch-data[6]
+	(ifBranchOp)(ifReg)(branch-control[3])
+
+WE = 
+	(op == 0[6])(func != 001000) + (op == 001xxx) + (op == 100xxx) + (op == 000011)
+
+
+
+	

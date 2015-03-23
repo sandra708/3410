@@ -1,0 +1,11 @@
+git clone <url> - initial copy of remote to your computer
+
+git pull - syncs your local copy by downloading changes
+
+git status - tells you what's going on
+
+git add <filename> - tells git that the file has been changed and will be committed
+
+git commit -m "description of changes" - lumps everything that's been added into a single package, labeled with the message
+
+git push origin master - syncs by changing the cloud version to reflect the changes which you've committed
